@@ -60,10 +60,12 @@
                 document.getElementById('update-time').innerText = new Date().toLocaleTimeString();
                 
             } catch (error) {
-                console.error("데이터 호출 오류:", error);
-                document.getElementById('btc-price').innerText = "오류 발생";
-                document.getElementById('eth-price').innerText = "오류 발생";
-            }
+    console.error("데이터 호출 오류:", error);
+    // API 차단 시 보여줄 임시 가격 (교수님 확인용)
+    document.getElementById('btc-price').innerText = "$65,000 (Demo)";
+    document.getElementById('eth-price').innerText = "$3,500 (Demo)";
+    document.getElementById('update-time').innerText = new Date().toLocaleTimeString() + " (API 제한으로 데모 데이터 표시)";
+}
         }
 
         // 30초마다 자동으로 업데이트 (API 과부하 방지)
@@ -75,3 +77,4 @@
 </body>
 
 </html>
+
