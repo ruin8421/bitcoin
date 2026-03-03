@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실시간 암호화폐 시세</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 50px; background-color: #f4f7f6; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 80%; max-width: 600px; background: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 15px; text-align: center; border-bottom: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        tr:hover { background-color: #f1f1f1; }
+        .price { font-weight: bold; color: #28a745; }
+        .last-update { margin-top: 20px; font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 암호화폐 실시간 시세 (CoinGecko)</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>코인명</th>
+                <th>심볼</th>
+                <th>현재 가격 (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Bitcoin</td>
+                <td>BTC</td>
+                <td id="btc-price" class="price">로딩 중...</td>
+            </tr>
+            <tr>
+                <td>Ethereum</td>
+                <td>ETH</td>
+                <td id="eth-price" class="price">로딩 중...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="last-update">최근 업데이트: <span id="update-time">-</span></p>
+
+    <script>
+        // CoinGecko API에서 데이터를 가져오는 함수
+        async function fetchPrices() {
+            const url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd';
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                // 테이블 데이터 업데이트
+                document.getElementById('btc-price').innerText = `$${data.bitcoin.usd.toLocaleString()}`;
+                document.getElementById('eth-price').innerText = `$${data.ethereum.usd.toLocaleString()}`;
+                
+                // 업데이트 시간 표시
+                document.getElementById('update-time').innerText = new Date().toLocaleTimeString();
+                
+            } catch (error) {
+                console.error("데이터 호출 오류:", error);
+                document.getElementById('btc-price').innerText = "오류 발생";
+                document.getElementById('eth-price').innerText = "오류 발생";
+            }
+        }
+
+        // 30초마다 자동으로 업데이트 (API 과부하 방지)
+        setInterval(fetchPrices, 30000);
+
+        // 페이지가 처음 열릴 때 실행
+        fetchPrices();
+    </script>
+</body>
+</html>
